@@ -1,0 +1,9 @@
+<h4>Edit Form</h4>
+<form action="{% url 'update' post.id %}" method="POST">
+  {% csrf_token %}
+  <!-- <input type="text" name="fields.title" value='{{post.title}}'/>
+  <textarea name="fields.content">{{post.content}}</textarea>
+  -->
+  {{form.as_p}}
+  <input type="submit" value="Update"/> 
+</form>
