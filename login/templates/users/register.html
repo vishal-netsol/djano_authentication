@@ -1,4 +1,5 @@
 <h4>Register</h4>
+<a href="{% url 'users:login' %}" style="float:right"> Login </a>
 {% if error_message %}<p><strong>{{error_message}}</strong></p>{% endif %}
 <form action="{%url 'users:create'%}" method="post">
   {% csrf_token %}
