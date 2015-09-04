@@ -11,6 +11,8 @@ from .serializers import *
 from rest_framework import mixins, generics
 from django.views.generic.detail import *
 import pdb
+from rest_framework.authentication import *
+from rest_framework.permissions import IsAuthenticated
 
 @login_required(login_url='/users/login/')
 def new(request):
@@ -109,6 +111,9 @@ class PostMember(mixins.RetrieveModelMixin,
                   generics.GenericAPIView):
   queryset = Post.objects.all()
   serializer_class = PostSerializer
+
+  authentication_classes = (TokenAuthentication,)
+  permission_classes = (IsAuthenticated,)
 
   def get(self, request, *args, **kwargs):
     return self.retrieve(request, *args, **kwargs)

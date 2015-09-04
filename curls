@@ -1,0 +1,16 @@
+#delete
+curl --header "Content-Type:application/json" --header "Accept:application/json" http://localhost:3000/api/v1/posts/3 -X DELETE
+
+#post
+
+curl -H "Accept: application/json" -H "Content-type: application/json" -X POST -d '{"post":{"title": "New task", "content": "content"}}' http://localhost:3000/api/v1/posts/
+
+#get
+
+curl -H "Accept: application/json" -H "Content-type: application/json" -X GET http://localhost:3000/api/v1/posts/
+
+#retrieve token
+curl -H"Accept:application/json" -H"Content-type:application/json" -X POST -d '{"username": "dummy2", "password":"dummy1234"}' http://localhost:3000/users/api-token-auth/
+
+
+

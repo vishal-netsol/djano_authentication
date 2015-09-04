@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout as user_logout
 from django.contrib.auth import authenticate as auth, login as user_login
 from django.contrib.auth.forms import *
+import pdb
 
 # Create your views here.
 def register(request):
@@ -26,6 +27,12 @@ def login(request):
   return render(request, 'users/login.html', {'form': form})
 
 def logout(request):
+  pdb.set_trace()
+  instance = User.objects.get(username=request.user)
+  token = Token.objects.get(user=instance)
+  if token:
+      token.delete()
+  Token.objects.create(user=instance)
   user_logout(request)
   return HttpResponseRedirect('/users/login')
 
