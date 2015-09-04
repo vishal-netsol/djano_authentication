@@ -8,6 +8,9 @@ from django.contrib.auth.decorators import login_required
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import *
+from rest_framework import mixins, generics
+from django.views.generic.detail import *
+import pdb
 
 @login_required(login_url='/users/login/')
 def new(request):
@@ -71,28 +74,65 @@ def update(request, post_id):
     raise Http404("Post Not Found")
   return HttpResponseRedirect(reverse(show, kwargs={'post_id': post.id}))
 
-@api_view(['GET', 'POST'])
-def post_collection(request):
-  if request.method == "GET":
-    posts = Post.objects.all()
-    serializer = PostSerializer(posts, many=True)
-    return Response(serializer.data)
-  elif request.method == 'POST':
-    data = {'title': request.data['post']['title'], 'content': request.data['post']['content']}
-    serializer = PostSerializer(data=data)
-    if serializer.is_valid():
-      serializer.save()
-      return Response(serializer.data)
-    return Response(serializer.errors)
 
-@api_view(['GET', 'Delete'])
-def post_element(request, pk):
-  try:
-    post = Post.objects.get(pk=pk)
-  except Post.DoesNotExist:
-    return HttpResponse(status=404)
-  if request.method == 'GET':
-    return Response(PostSerializer(post).data)
-  elif request.method == 'DELETE':
-    post.delete()
-    return Response("Post successfully deleted")
+
+class PostCollection(mixins.ListModelMixin,
+                      mixins.CreateModelMixin,
+                      generics.GenericAPIView):
+
+  queryset = Post.objects.all()
+  serializer_class = PostSerializer
+
+  def get(self, request, *args, **kwargs):
+    return self.list(request, *args, **kwargs)
+
+  def post(self, request, *args, **kwargs):
+    return self.create(request, *args, **kwargs)
+
+#@api_view(['GET', 'POST'])
+# def post_collection(request):
+#   if request.method == "GET":
+#     posts = Post.objects.all()
+#     serializer = PostSerializer(posts, many=True)
+#     return Response(serializer.data)
+#   elif request.method == 'POST':
+#     data = {'title': request.data['post']['title'], 'content': request.data['post']['content']}
+#     serializer = PostSerializer(data=data)
+#     if serializer.is_valid():
+#       serializer.save()
+#       return Response(serializer.data)
+#     return Response(serializer.errors)
+
+class PostMember(mixins.RetrieveModelMixin,
+                  mixins.DestroyModelMixin,
+                  mixins.UpdateModelMixin,
+                  generics.GenericAPIView):
+  queryset = Post.objects.all()
+  serializer_class = PostSerializer
+
+  def get(self, request, *args, **kwargs):
+    return self.retrieve(request, *args, **kwargs)
+
+  def delete(self, request, *args, **kwargs):
+    return self.destroy(request, *args, **kwargs)
+
+  def put(self, request, *args, **kwargs):
+    #pdb.set_trace()
+    #kwargs['partial'] = True
+    return self.partial_update(request, *args, **kwargs)
+
+
+# @api_view(['GET', 'DELETE', 'PUT'])
+# def post_element(request, pk):
+#   post = get_object_or_404(Post, id=pk)
+#   if request.method == 'GET':
+#     return Response(PostSerializer(post).data)
+#   elif request.method == 'DELETE':
+#     post.delete()
+#     return Response("Post successfully deleted")
+#   elif request.method == 'PUT':
+#     serializer = PostSerializer(post, data=request.data['post'], partial=True)
+#     if serializer.is_valid():
+#       serializer.save()
+#       return Response(serializer.data)
+#     return Response(serializer.errors)

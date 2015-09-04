@@ -30,7 +30,7 @@ urlpatterns = [
     url(r'^post/(?P<post_id>\d+)/update', views.update, name="update"),
     url(r'^users/', include('login.urls', namespace="users")),
         # api
-    url(r'^api/v1/posts/$', views.post_collection),
-    url(r'^api/v1/posts/(?P<pk>[0-9]+)$', views.post_element)
+    url(r'^api/v1/posts/$', views.PostCollection.as_view()),
+    url(r'^api/v1/posts/(?P<pk>[0-9]+)$', views.PostMember.as_view())
 
 ]

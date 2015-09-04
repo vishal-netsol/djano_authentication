@@ -30,7 +30,6 @@ def logout(request):
   return HttpResponseRedirect('/users/login')
 
 def authenticate(request):
-  print request.POST['username']
   user = auth(username=request.POST['username'], password=request.POST['password'])
   print user
   if user is not None:
