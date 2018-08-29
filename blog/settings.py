@@ -41,7 +41,12 @@ INSTALLED_APPS = (
     'blog',
     'login',
     'rest_framework',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
+    'bootstrap3',
+    'bootstrap3_datetime',
+    'social.apps.django_app.default',
+    'apps.accounts',
+    'apps.backends'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -81,10 +86,10 @@ WSGI_APPLICATION = 'blog.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'blog',
-        'USER': 'vishal',
-        'PASSWORD': 'dummy1234',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
@@ -94,7 +99,7 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Calcutta'
 
 USE_I18N = True
 
@@ -107,3 +112,20 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+
+AUTHENTICATION_BACKENDS = (
+    'social.backends.linkedin.LinkedinOAuth2',
+    'social.backends.facebook.FacebookOAuth2',
+    'social.backends.google.GoogleOAuth2',
+    'social.backends.twitter.TwitterOAuth',
+    'django.contrib.auth.backends.ModelBackend',
+    'apps.backends.email_backend.EmailOrUsernameModelBackend',
+)
+
+from config import *
+
+AUTH_USER_MODEL = 'accounts.User'
+
+AWS_SECRET_ACCESS_KEY = 'Ele4e2OOdBz8T0yz3dbqnyE9fD0drAo1I35xYhYl'
+
+AWS_ACCESS_KEY_ID = 'AKIAIFXS67GQIDUEV2TQ'
